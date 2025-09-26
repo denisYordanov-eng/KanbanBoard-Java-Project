@@ -107,4 +107,28 @@ public class TaskController {
         taskRepository.saveAndFlush(task);
         return "redirect:/";
     }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable int id,TaskBindingModel taskBindingModel, Model model) {
+        Task task = taskRepository.findOne(id);
+        if (task != null) {
+
+            model.addAttribute("view", "task/delete");
+            model.addAttribute("task", task);
+            return "base-layout";
+        }
+
+        return "redirect:/";
+    }
+    @PostMapping("/delete/{id}")
+    public String deleteProcess(Model Model, @PathVariable int id) {
+        Task task = taskRepository.findOne(id);
+
+        if (task == null) {
+            return "redirect:/";
+        }
+       taskRepository.delete(task);
+        taskRepository.flush();
+        return "redirect:/";
+    }
 }
